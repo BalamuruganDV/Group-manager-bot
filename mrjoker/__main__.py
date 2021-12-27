@@ -77,7 +77,7 @@ MRJOKER_IMG = "https://super.rootgamer.workers.dev/0:/-6302840176346508503_121.j
 MRJOKER_AUD = "https://super.rootgamer.workers.dev/0:/-6302840176346508503_121.jpg"
 
 
-PM_START_TEXT =.format(name=message.from_user.first_name), """
+PM_START_TEXT =.format(name=m.from_user.first_name), """
 *Hello there* {name}, *I*'*m* [Anjumani group management bot](https://super.rootgamer.workers.dev/0:/-6302840176346508503_121.jpg)
 *I am an 𝐴𝑛𝑖𝑚𝑒 Themed Group Managing Bot and I will help in managing your group*
 🍃🔻 **Make sure you read** `INFO` **Section Below** 🔺🍃 
