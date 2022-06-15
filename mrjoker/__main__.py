@@ -77,32 +77,6 @@ MRJOKER_IMG = "https://super.rootgamer.workers.dev/0:/-6302840176346508503_121.j
 MRJOKER_AUD = "https://super.rootgamer.workers.dev/0:/-6302840176346508503_121.jpg"
 
 
-PM_START_TEXT = """
-*Hello there* {name}, *I*'*m* [Anjumani group management bot](https://super.rootgamer.workers.dev/0:/-6302840176346508503_121.jpg)
-*I am an 𝐴𝑛𝑖𝑚𝑒 Themed Group Managing Bot and I will help in managing your group*
-🍃🔻 **Make sure you read** `INFO` **Section Below** 🔺🍃 
-"""
-
-buttons = [
-    [
-        InlineKeyboardButton(
-            text="🤡 𝗛𝗘𝗟𝗣 🤡", callback_data="help_back"),
-    ],
-   # [
-     #   InlineKeyboardButton(
-     #       text ="Language", callback_data="set_lang_"),
-    #],
-    [
-        InlineKeyboardButton(text="🚀 𝗜𝗡𝗙𝗢 🚀", callback_data="mrjoker_"),
-        InlineKeyboardButton(
-            text=" 𝗕𝗔𝗦𝗜𝗖 𝗛𝗘𝗟𝗣 👮", callback_data="mrjoker_basichelp"
-        ),
-    ],
-    
-    [
-        InlineKeyboardButton(text="➕ Add me to your group ➕", url="http://t.me/Mrjokerlk_bot?startgroup=true"),
-    ],
-]
 
 
 HELP_STRINGS = """
@@ -185,57 +159,7 @@ def test(update: Update, context: CallbackContext):
     print(update.effective_message)
 
 
-@run_async
-def start(update: Update, context: CallbackContext):
-    args = context.args
-    uptime = get_readable_time((time.time() - StartTime))
-    if update.effective_chat.type == "private":
-        if len(args) >= 1:
-            if args[0].lower() == "help":
-                send_help(update.effective_chat.id, HELP_STRINGS)
-            elif args[0].lower().startswith("ghelp_"):
-                mod = args[0].lower().split("_", 1)[1]
-                if not HELPABLE.get(mod, False):
-                    return
-                send_help(
-                    update.effective_chat.id,
-                    HELPABLE[mod].__help__,
-                    InlineKeyboardMarkup(
-                        [[InlineKeyboardButton(text="⬅️ 𝗕𝗔𝗖𝗞", callback_data="help_back")]]
-                    ),
-                )
 
-            elif args[0].lower().startswith("stngs_"):
-                match = re.match("stngs_(.*)", args[0].lower())
-                chat = dispatcher.bot.getChat(match.group(1))
-
-                if is_user_admin(chat, update.effective_user.id):
-                    send_settings(match.group(1), update.effective_user.id, False)
-                else:
-                    send_settings(match.group(1), update.effective_user.id, True)
-
-            elif args[0][1:].isdigit() and "rules" in IMPORTED:
-                IMPORTED["rules"].send_rules(update, args[0], from_pm=True)
-
-        else:
-            update.effective_message.reply_text(
-                PM_START_TEXT,
-                reply_markup=InlineKeyboardMarkup(buttons),
-                parse_mode=ParseMode.MARKDOWN,
-                timeout=60,
- 
-            )
-    else:
-        update.effective_message.reply_photo(
-            MRJOKER_IMG, caption= "I'm awake already!\n<b>Haven't slept since:</b> <code>{}</code>".format(
-                uptime
-            ),
-            parse_mode=ParseMode.HTML,
-            reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text="Channel", url="https://t.me/anjumani_zone")]]
-            ),
-        )
-        
 def error_handler(update, context):
     """Log the error and send a telegram message to notify the developer."""
     # Log the error before we do anything else, so we can see it even if something breaks.
@@ -808,7 +732,7 @@ def main():
             LOGGER.warning(e.message)
 
     test_handler = CommandHandler("test", test)
-    start_handler = CommandHandler("start", start)
+
 
     help_handler = CommandHandler("help", get_help)
     help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_.*")
@@ -823,7 +747,7 @@ def main():
     migrate_handler = MessageHandler(Filters.status_update.migrate, migrate_chats)
 
     # dispatcher.add_handler(test_handler)
-    dispatcher.add_handler(start_handler)
+
     dispatcher.add_handler(help_handler)
     dispatcher.add_handler(about_callback_handler)
     dispatcher.add_handler(source_callback_handler)
